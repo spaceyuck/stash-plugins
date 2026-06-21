@@ -1,0 +1,34 @@
+name: Detect scene and image extension changes
+description: Looks for scene and image files that have changed file extensions (for example from converting them to a more optimal format). Requires both old and new file to be in database, so run a scan before running this plugin. If the old file has been renamed to the new name, do not run a clean-up before completing migrating all data. 
+version: 0.1
+exec:
+  - python
+  - "{pluginDir}/ExtensionChangeDetector.py"
+interface: raw
+
+settings:
+  scenesUsePhash:
+    displayName: Require matching or close phash for scenes
+    description: Only detect files with new extensions with matching pHash
+    type: BOOLEAN
+  scenesPathPrefix:
+    displayName: Path prefix for scene paths to check
+    description: If set, only paths starting with the set value will be checked
+    type: STRING
+  imagesUsePhash:
+    displayName: Require matching phash for images
+    description: Only detect files with new extensions with matching pHash
+  imagesPathPrefix:
+    displayName: Path prefix for image paths to check
+    description: If set, only paths starting with the set value will be checked
+    type: STRING
+  
+tasks:
+  - name: "Check all scenes for new variant"
+    description: Loops through all scenes and look for new varaint. If pHash Matchign is enabled, will be pretty fast, based on duplicate detection. If not, will walk through entire scene list - this might take a long time on large databases.
+    defaultArgs:
+      mode: processAllScenes
+  - name: "Check all images for new variant"
+    description: Loops through all images and look for new varaint, copying all metadata from the variant created earliest to the other versions. Will walk through entire image list - this might take a very very long time on large databases. Also, you really want to disable plugins that attach to the hook ```Image.Update.Post```.
+    defaultArgs:
+      mode: processAllImages
