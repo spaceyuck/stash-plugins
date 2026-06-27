@@ -112,7 +112,9 @@ def _get_image_folder_items(folder_id, page) -> list[dict]:
     )
 
 def _get_image(id: str) -> dict:
-    return stash.find_image(id)
+    ret = stash.find_image(id)
+    ret['files'] = ret['visual_files']
+    return ret
 
 def _update_image(changes):
     stash.update_images(changes)
@@ -211,15 +213,15 @@ def _process_folder(folder: dict[str, str],
     if setting_path_prefix:
         # current path is within configured prefix
         if folder['path'] == setting_path_prefix or folder['path'].startswith(setting_path_prefix):
-            log.debug(f"path prefix \"{setting_path_prefix}\" allows processing \"{folder['path']}\"")
+            #log.debug(f"path prefix \"{setting_path_prefix}\" allows processing \"{folder['path']}\"")
             scan_files=True
         # current path is parent of configured prefix
         elif setting_path_prefix.startswith(folder['path']):
-            log.debug(f"path prefix \"{setting_path_prefix}\" subtree-only processing \"{folder['path']}\"")
+            #log.debug(f"path prefix \"{setting_path_prefix}\" subtree-only processing \"{folder['path']}\"")
             scan_files=False
         # current path is unrelated to configured prefix -> skip
         else:
-            log.debug(f"path prefix \"{setting_path_prefix}\" excludes processing \"{folder['path']}\"")
+            #log.debug(f"path prefix \"{setting_path_prefix}\" excludes processing \"{folder['path']}\"")
             yield item_subtree_count
             return
     else:
@@ -260,7 +262,7 @@ def _process_folder_files(folder: dict[str, str],
         get_folder_items: Callable[[str], list[dict]], get_item : Callable[[str], dict], update_item : Callable[[dict], None], merge_items : Callable[[list[int], int], dict] = None,
         setting_use_phash: bool = False, setting_use_merge: bool = False
 ):
-    log.info(f"scanning \"{folder['path']}\" for items with changed extensions...")
+    log.debug(f"scanning \"{folder['path']}\" for items with changed extensions...")
 
     item_groups_by_path : dict[str, list] = defaultdict(list)
     processed_ids = set()
