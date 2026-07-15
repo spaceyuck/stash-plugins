@@ -388,6 +388,8 @@ def _do_process_item_group(items: list,
         changes["tag_ids"] = {"mode": "ADD", "ids": [t['id'] for t in oldest_item['tags']]}
     if 'galleries' in oldest_item and  len(oldest_item['galleries']) > 0:
         changes["gallery_ids"] = {"mode": "ADD", "ids": [t['id'] for t in oldest_item['galleries']]}
+    if 'organized' in oldest_item and oldest_item['organized']:
+        changes['organized'] = oldest_item['organized']
     
     ids = []
     for item_full in items_full:
@@ -405,11 +407,11 @@ def _do_process_item_group(items: list,
                 or ("director" in changes and ('director' not in item_full or item_full['director'] != changes["director"])) \
                 or ("photographer" in changes and ('photographer' not in item_full or item_full['photographer'] != changes["photographer"])) \
                 or ("rating100" in changes and ('rating100' not in item_full or item_full['rating100'] != changes["rating100"])) \
-                or ("o_counter" in changes and ('o_counter' not in item_full or item_full['o_counter'] != changes["o_counter"])) \
                 or ("studio_id" in changes and ('studio' not in item_full or item_full['studio'] is None or str(item_full['studio']['id']) != changes["studio_id"])) \
                 or ("performer_ids" in changes and ('performers' not in item_full or len(item_full['performers']) < len(changes["performer_ids"]["ids"]))) \
                 or ("tag_ids" in changes and ('tags' not in item_full or len(item_full['tags']) < len(changes["tag_ids"]["ids"]))) \
                 or ("gallery_ids" in changes and ('galleries' not in item_full or len(item_full['galleries']) < len(changes["gallery_ids"]["ids"]))) \
+                or ("organized" in changes and ('organized' not in item_full or not item_full['organized'] != changes['organized'])) \
             :
             ids.append(item_full['id'])
 
