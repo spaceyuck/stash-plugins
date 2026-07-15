@@ -380,8 +380,6 @@ def _do_process_item_group(items: list,
          changes["photographer"] = oldest_item['photographer']
     if 'rating100' in oldest_item and oldest_item['rating100']:
          changes["rating100"] = oldest_item['rating100']
-    if 'o_counter' in oldest_item and oldest_item['o_counter']:
-         changes["o_counter"] = oldest_item['o_counter']
     if 'studio' in oldest_item and oldest_item['studio'] is not None:
          changes["studio_id"] = oldest_item['studio']['id']
     if 'performers' in oldest_item and  len(oldest_item['performers']) > 0:

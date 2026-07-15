@@ -18,6 +18,7 @@ settings:
   imagesUsePhash:
     displayName: Require matching phash for images
     description: Only detect files with new extensions with matching pHash
+    type: BOOLEAN
   imagesPathPrefix:
     displayName: Path prefix for image paths to check
     description: If set, only paths starting with the set value will be checked
